@@ -1,7 +1,11 @@
 <?php
+// setting APIKey for easy  access.
 $apikey ="QFIlKf2cy3y9GM3EGnGddJmNLpGBl3vG";
 
+// set URL variable to have easy access to
 $URL = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/3494540?apikey=$apikey&language=en-us&metric=true";
+
+// open URL and stream get to get data through resource
 $forecast_content = fopen($URL, "r");
 $daily_forecasts = stream_get_contents($forecast_content);
 fclose($forecast_content);
