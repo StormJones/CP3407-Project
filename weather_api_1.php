@@ -1,7 +1,7 @@
 <?php
 	
 	// Static API Key for OpenWeather API
-	$APIKEY = "c4e44b0722840790c67497825f9084d9";
+	$APIKEY = "47eedbe51652e1f27b7337a28f386f22";
 	
 	// Search Location
 	$location = "Townsville";
@@ -21,10 +21,24 @@
 	// curl_exec() executes the started curl session
 	$output = curl_exec($curl);
 	
-	echo $output;
-
 	// close curl resource
 	curl_close($curl);
 
 
 ?>
+
+
+
+<html>
+	<head>
+		<title>API Test One</title>
+	</head>
+	<body>
+		<h1>API Test One</h1>
+		<h2>Using OpenWeather API</h2>
+		<hr>
+		<b>Using API Key: </b><u><?php echo $APIKEY; ?></u><br /><br />
+		<b>Output:</b><br />
+		<?php echo $output; ?>
+	</body>
+</html>
