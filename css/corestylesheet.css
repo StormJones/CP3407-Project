@@ -80,10 +80,6 @@ body {
     background-color: #fff
 }
 
-.navbar {
-    margin-bottom: 20px;
-}
-
 [tabindex="-1"]:focus {
     outline: 0!important
 }
