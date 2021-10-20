@@ -1,109 +1,93 @@
-<!doctype html>
+<html lang="en">
+<head>
+<title>My Profile</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../css/corestylesheet.css">
+<link rel="stylesheet" type="text/css" href="../css/notificationsstylesheet.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+</head>
 
-<!doctype html>
-
-<html>
-
-    <head>
-
-        <meta charset="utf-8" />
-        <meta name="keywords" content="weather, australia, rain, rainfall, temperature, wind, pressure" />
-        <meta name="description" content="Fast, easy and convenient weather information that matters to you most!" />
-        <title>Australian Weather</title>
-        <link rel="stylesheet" type="text/css" href="../css/stylesheet.css">
-
-        <script type="php"></script>
-
-    </head>
-
-    <body>
-        <img src="../Images/Logo.jpg">
-        <h1>Welcome to Group 3 for CP3407</h1>
-        <h2>Please click either of the two prototypes below to proceed</h2>
-    </body>
-
-    <div class="box">
-        <a href='weather_api_1.html'>
-            <h3>ACCU Weather</h3>
-        </a>
-        <p>AccuWeather provides the world's most sophisticated weather intelligence to make lives simpler, safer and better. Our mission is to save lives and protect property.</p>
-        <img src="../Images/accuweather.jpg" style="width:100%">
+<body>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark"> <a class="navbar-brand" href="#">Aussie Weather</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+  <div class="collapse navbar-collapse" id="navbarsExample03">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li>
+      <li class="nav-item"> <a class="nav-link" href="#">Profile</a> </li>
+      <li class="nav-item"> <a class="nav-link" href="#">Sign Up</a> </li>
+      <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Favourites</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown03"> <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a> </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-md-0">
+      <input class="form-control" type="text" placeholder="Search">
+    </form>
+  </div>
+</nav>
+<!--/header-->
+<div class="container bootstrap snippet">
+  <div class="row">
+    <div class="col-sm-10">
+      <h1>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Create New Notification</h1>
     </div>
-
-    <div class="box">
-        <a href='weather_api_2.html'>
-            <h3>Weather API</h3>
-        </a>
-        <p>Designed for developers by developers, Weather API is the ultimate weather and geolocation API trusted by +50K users worldwide. Integrate weather in Mobile Apps, Open Source Projects, JS Libraries and more!</p>
-        <img src="../Images/weatherapi.png" style="width:100%">
+    <div class="col-sm-2"><a href="/users" class="pull-right"><img class="mb-4" src="..\Images\Logo.png" alt="" width="150" height="150"></a></div>
+    <div class="fav-location col-lg-offset-0 col-lg-8">
+      <h1 class="text-center">Enter Location:</h1>
+      <label for="inputEmail" class="sr-only">Location</label>
+      <input type="text" id="inputLocation" class="form-control" placeholder="Location" required="" autofocus="">
     </div>
+    <div class="fav-location col-lg-offset-0 col-lg-8">
+      <h1 class="text-center">Select Alert Type:</h1>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" 
+          id="dropdownMenu1" data-toggle="dropdown" 
+          aria-haspopup="true" aria-expanded="true"> <span class="caret"></span> Favorite Colour </button>
+        <ul class="dropdown-menu checkbox-menu allow-focus" aria-labelledby="dropdownMenu1">
+          <li >
+            <label class="list-group-item d-flex gap-2">
+              <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios1" value="" checked>
+              <span> Rainfall </span> </label>
+            <label class="list-group-item d-flex gap-2">
+              <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios2" value="">
+              <span> Windspeed </span> </label>
+            <label class="list-group-item d-flex gap-2">
+              <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios3" value="">
+              <span> Temperature </span> </label>
+            <label class="list-group-item d-flex gap-2">
+              <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios4" value="">
+              <span> Pressure </span> </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+	  <div class="fav-location col-lg-offset-0 col-lg-8">
+      <h1 class="text-center">Enter Value:</h1>
+      <label for="inputEmail" class="sr-only">Location</label>
+      <input type="text" id="inputLocation" class="form-control" placeholder="Location" required="" autofocus="">
+	  <form>
+    <label class="radio-inline">
+      <input type="radio" name="optradio" checked>Less than
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Equal to
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Greater than
+    </label>
+  </form>
+    </div>
+	  <div class="fav-location col-lg-offset-0 col-lg-8">
+      <button class="btn btn-default noti-btn" >
+    <a href=""></a>Save Notification
+    </button>
+    </div>
+    
+    
+  </div>
+  <!--/row--> 
+</div>
+</body>
 </html>
-
-<!-- Set Layout for content -->
-<!-- <style> -->
-<!-- * { -->
-  <!-- box-sizing: border-box; -->
-<!-- } -->
-
-<!-- .column { -->
-    <!-- float: left; -->
-    <!-- width: 50%; -->
-    <!-- padding: 10px; -->
-    <!-- height: 300px; -->
-<!-- } -->
-
-<!-- .row:after { -->
-    <!-- content: ""; -->
-    <!-- display: table; -->
-    <!-- clear: both -->
-<!-- } -->
-<!-- </style> -->
-
-
-<!-- Generate Heading Information -->
-<!-- <h1 style="text-align:center;">Welcome to Group 5 for CP3407</h1> -->
-<!-- <h2 style="text-align:center;">Please click either of the two prototypes below to proceed.</h2> -->
-
-<!-- <div class="row"> -->
-
-    <!-- Build the left side to craft ACCU Weather -->
-    <!-- <div class="column" id="left"> -->
-        <!-- <style> -->
-            <!-- div left{ -->
-                <!-- background-image: url('accuweather.jpg'); -->
-                <!-- background-repeat: no-repeat; -->
-                <!-- background-attachment: fixed;  -->
-                <!-- background-size: 50%; -->
-            <!-- } -->
-        <!-- </style> -->
-        <!-- <h3 style="text-align:center;"> -->
-            <!-- <a href='weather_api_1.php'>Weather API Prototype 1</a> -->
-        <!-- </h3> -->
-    <!-- </div> -->
-    <!-- <div class="column" id="right"> -->
-        <!-- <style> -->
-            <!-- div { -->
-                <!-- background-image: url('accuweather.jpg'); -->
-                <!-- background-repeat: no-repeat; -->
-                <!-- background-attachment: fixed;  -->
-                <!-- background-size: 50%; -->
-            <!-- } -->
-        <!-- </style> -->
-        <!-- <h3 style="text-align:center;"> -->
-            <!-- <a href='weather_api_1.php'>Weather API Prototype 1</a> -->
-        <!-- </h3> -->
-
-        <!-- <a href='weather_api_2.php'>Weather API Prototype 2</a> -->
-        <!-- <p> Some text ... </p> -->
-    <!-- </div> -->
-<!-- </div> -->
-
-
-<!-- <br/> -->
-<!-- <img src="accuweather.jpg" alt="ACCU Weather"> -->
-<!-- <br/> -->
-
-<!-- <br /> -->
-<!-- <hr> -->
-<!-- <br /> -->
-<!-- <i><u><b>Hello World!</b></u></i> -->
