@@ -1,3 +1,30 @@
+<?php
+
+	session_start();
+	require 'database.php';
+	
+	if(isset($_POST['email']))
+	{
+		// Do login stuff
+		
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		$confirmpassword = $_POST['confirmpassword'];
+		
+		if($password != $confirmpassword)
+		{
+			die('passwords don\'t match!');
+		}
+		
+		$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+		mysqli_query($connection, "INSERT INTO user (email, password) VALUES ('$email', '$hashedPassword')");
+		header('Location: login.php');
+		
+	}
+
+
+?>
+
 <html lang="en">
 
 <head>
@@ -29,39 +56,25 @@
         <div class="collapse navbar-collapse" id="navbarsExample03">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="map.php">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Up</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Favourites</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown03">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+                    <a class="nav-link" href="login.php">Return to Login</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-md-0">
-                <input class="form-control" type="text" placeholder="Search">
-            </form>
         </div>
     </nav>
 
     <div class="content">
-        <form class="form-signin">
+        <form class="form-signin" action='' method='POST'>
             <img class="mb-4" src="..\Images\Logo.png" alt="" width="150" height="150">
             <h1 class="h3 mb-3 font-weight-normal">Welcome!</h1>
             <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            <input type="email" name='email' id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Select Password" required="">
+            <input type="password" name='password' id="inputPassword" class="form-control" placeholder="Select Password" required="">
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="confirmpassword" id="confirmPassword" class="form-control" placeholder="Confirm Password" required="">
+            <input type="password" name='confirmpassword' id="confirmPassword" class="form-control" placeholder="Confirm Password" required="">
             <p class="text-muted">Use 8 or more characters with a mix of letters, numbers & symbols</p>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Create Account</button>
             <p class="mt-5 mb-3 text-muted">Aussie Weather © 2021</p>

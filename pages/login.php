@@ -1,3 +1,34 @@
+<?php
+
+	session_start();
+	require 'database.php';
+	
+	if(isset($_POST['email']))
+	{
+		// Do login stuff
+		
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		
+		$getLogins = mysqli_query($connection, "SELECT id, password FROM user WHERE email = '$email'  LIMIT 1");
+		
+		while($checkLogins = mysqli_fetch_assoc($getLogins))
+		{
+			if(password_verify($password, $checkLogins['password']))
+			{
+				echo "LOGIN SUCCESSFUL";
+				$_SESSION['userid'] = $checkLogins['id'];
+				header('Location: map.php');
+			}			
+			
+		}
+		
+		
+	}
+
+
+?>
+
 <html lang="en">
 
 <head>
@@ -28,37 +59,23 @@
         <div class="collapse navbar-collapse" id="navbarsExample03">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="map.php">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Up</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Favourites</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown03">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+                    <a class="nav-link" href="signup.php">Sign Up</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-md-0">
-                <input class="form-control" type="text" placeholder="Search">
-            </form>
         </div>
     </nav>
 
     <div class=content>
-        <form class="form-signin">
+        <form class="form-signin" action='' method='post'>
             <img class="mb-4" src="..\Images\Logo.png" alt="" width="150" height="150">
             <h1 class="h3 mb-3 font-weight-normal">Welcome! Please Log in</h1>
             <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            <input type="email" name='email' id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+            <input type="password" name='password' id="inputPassword" class="form-control" placeholder="Password" required="">
             <div class="checkbox mb-3">
                 <label>
             <input type="checkbox" value="remember-me"> Remember me
