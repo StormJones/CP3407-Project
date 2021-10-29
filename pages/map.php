@@ -1,10 +1,4 @@
 <?php
-
-	session_start();
-	require 'database.php';
-	
-	if(!isset($_SESSION['userid']))
-		header("Location: login.php");
 	
 	// Static API Key for OpenWeather API
 	$APIKEY = "85a2b9dc008241e1a6131919210509";
@@ -25,8 +19,9 @@
 	if(isset($_GET['useAccuweather']))
 	{
 		$useAccuWeather = true;
-		$weatherURL = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/3494540?apikey=$ACCUWEATHER_APIKEY&language=en-us&metric=true";
-	}	
+		$weatherURL = "http://dataservice.accuweather.com/locations/v1/cities/au/search?apikey=$ACCUWEATHER_APIKEY&q=$location";
+	}
+	
 	
 	// Create & initialize a curl session
 	$curl = curl_init();
@@ -97,6 +92,26 @@
 		}
 	}
 
+    if($useAccuWeather)
+    {
+        // gets location key from given text
+        $locationKey = $jsonEncoded[0]['Key'];
+        $locationName = $jsonEncoded[0]['LocalizedName'];
+
+        $weatherURL = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/$locationKey?apikey=$ACCUWEATHER_APIKEY&language=en-us&details=true&metric=true" ;
+
+        curl_setopt($curl,CURLOPT_URL,$weatherURL);
+        curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($curl,CURLOPT_HEADER,0);
+
+        $output = curl_exec($curl);
+        curl_close($curl);
+
+        $jsonEncoded = json_decode($output,true);
+
+
+
+    }
 ?>
 
 <html lang="en">
@@ -128,7 +143,7 @@
         </form>
 		<ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="logout.php">Sign out</a>
+                <a class="nav-link" href="#">Sign out</a>
             </li>
         </ul>
     </nav>
@@ -137,30 +152,50 @@
         <div class="row">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home<span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg> Favourites
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> Alerts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Profile
+                            </a>
+                        </li>
+                    </ul>
+
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Saved Locations</span>
-              <a class="d-flex align-items-center text-muted" href="addLocation.php?location=<?php echo $locationName; ?>" title='Click here to save this location as a favorite'>
+              <a class="d-flex align-items-center text-muted" href="#">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
               </a>
             </h6>
                     <ul class="nav flex-column mb-2">
-					
-						<?php
-							$getAllFavorites = mysqli_query($connection, "SELECT * FROM favorites WHERE userid = '1'");
-							while($displayAllFavorites = mysqli_fetch_assoc($getAllFavorites))
-							{
-								?>
-									<li class="nav-item">
-										<a class="nav-link" href="map.php?location=<?php echo $displayAllFavorites['city']; ?>">
-											<a href='deleteLocation.php?location=<?php echo $displayAllFavorites['city']; ?>' title='Delete Favorite'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-</svg></a> <?php echo $displayAllFavorites['city']; ?>
-										</a>
-									</li>
-								<?php
-							}
-						?>						
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Brisbane
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Townsville
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Newcastle
+                            </a>
                     </ul>
                 </div>
             </nav>
@@ -203,8 +238,13 @@
 							{
 								echo $jsonEncoded['current']['last_updated']; 
 							}else{
-								echo $jsonEncoded['Headline']['EffectiveDate']; 
+								echo $jsonEncoded['Headline']['EffectiveDate'];
+                            ?> </h6>
+                            <h6>Upcoming notices: <?php
+                                echo $jsonEncoded['Headline']['Text'];
 							}
+
+
 						?></h6>
 							<div class="table-responsive">
 								<table class="table table-striped table-sm">
@@ -223,12 +263,72 @@
 													<td>".$jsonEncoded['current'][$value_name]."</td>
 												</tr>";
 											}
-										}elseif($baseArrayName == "Headline"){
-											
+										}elseif($useAccuWeather){
+                                            echo "<tr>
+                                                  <th>Weather Summary </th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['Day']['LongPhrase']."</td>
+                                                 </tr>
+                                                 <tr>
+                                                 <th>Temperature (Celcius)</th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['Temperature']['Maximum']['Value']."</td>
+                                                 </tr>
+                                                
+                                                 <tr>
+                                                 <th>Wind Speed (km/h)</th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['Day']['Wind']['Speed']['Value']."</td>
+                                                 </tr>
+                                               
+                                                 <tr>
+                                                 <th>Wind Direction</th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['Day']['Wind']['Direction']['Localized']."</td>
+                                                 </tr>
+                                                
+                                                <tr>
+                                                 <th>Rain</th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['Day']['Rain']['Value']."</td>
+                                                 </tr>
+                                                
+                                                <tr>
+                                                 <th>Humidity</th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['Day']['Wind']['Speed']['Value']."</td>
+                                                 </tr>
+                                                
+                                                 <tr>
+                                                 <th>Feels like (Celcius)</th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['RealFeelTemperature']['Maximum']['Value']."</td>
+                                                 </tr>
+                                                
+                                                <tr>
+                                                 <th>UV rating</th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['AirAndPollen'][5]['Value']."</td>
+                                                 </tr>
+                                                 
+                                                 <tr>
+                                                 <th>Air Pollen rating </th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['AirAndPollen'][0]['Category']."</td>
+                                                 </tr>
+                                                 <th>Wind Gust (km/h) </th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['Day']['WindGust']['Speed']['Value']."</td>
+                                                 </tr>
+                                                 <th>Wind Gust Direction </th>
+                                                 <td>".$jsonEncoded['DailyForecasts'][0]['Day']['WindGust']['Direction']['Localized']."</td>
+                                                 </tr>"
+                                            ;
+
+
+                                            
+                                            
+
+
+
+
 											/*
-											
+											    table setup
 												ACCUWEATHER HERE!
-											
+
+
+
+
 											*/
 											
 										}
